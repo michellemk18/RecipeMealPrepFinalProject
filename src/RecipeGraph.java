@@ -16,11 +16,17 @@ public class RecipeGraph {
 
     // Add a recipe to the graph
     public void addRecipe(Recipe recipe) {
-        graph.putIfAbsent(recipe, new ArrayList<>());
+
+        graph.putIfAbsent(
+                recipe,
+                new ArrayList<>()
+        );
     }
 
     // Connect two recipes together
-    public void addConnection(Recipe recipe1, Recipe recipe2) {
+    public void addConnection(
+            Recipe recipe1,
+            Recipe recipe2) {
 
         addRecipe(recipe1);
         addRecipe(recipe2);
@@ -30,17 +36,54 @@ public class RecipeGraph {
     }
 
     // Get recipes related to a specific recipe
-    public List<Recipe> getRelatedRecipes(Recipe recipe) {
+    public List<Recipe> getRelatedRecipes(
+            Recipe recipe) {
 
         if (!graph.containsKey(recipe)) {
+
             return new ArrayList<>();
         }
 
         return graph.get(recipe);
     }
 
+    // Recommendation method
+    public List<Recipe> getRecommendations(
+            Set<Recipe> favorites) {
+
+        Set<Recipe> recommendations =
+                new HashSet<>();
+
+        // Look at every recipe the user favorited
+        for (Recipe favorite : favorites) {
+
+            // Find recipes connected to that favorite
+            List<Recipe> relatedRecipes =
+                    graph.getOrDefault(
+                            favorite,
+                            new ArrayList<>()
+                    );
+
+            // Add them to recommendations
+            recommendations.addAll(
+                    relatedRecipes
+            );
+        }
+
+        // Don't recommend recipes
+        // the user already favorited
+        recommendations.removeAll(
+                favorites
+        );
+
+        return new ArrayList<>(
+                recommendations
+        );
+    }
+
     // Get all recipes in the graph
     public Map<Recipe, List<Recipe>> getGraph() {
+
         return graph;
     }
 }

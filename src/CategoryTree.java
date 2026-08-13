@@ -1,15 +1,20 @@
 import java.util.ArrayList;
 import java.util.List;
 
+//CategoryTree organizes recipes into categories using a Tree data structure.
 public class CategoryTree {
 
     // A node represents one category in the tree
     private static class CategoryNode {
 
+        // The name of the category
         String category;
+        // A List of recipes belonging to category
         List<Recipe> recipes;
+        // a List of child category nodes, stores any categories under this node
         List<CategoryNode> children;
 
+        //New category node
         CategoryNode(String category) {
             this.category = category;
             this.recipes = new ArrayList<>();
@@ -19,7 +24,7 @@ public class CategoryTree {
 
     // The top of our tree
     private CategoryNode root;
-
+    //Constructor for CategoryTree, will contain all our recipe categories
     public CategoryTree() {
         root = new CategoryNode("Recipes");
     }
@@ -74,10 +79,12 @@ public class CategoryTree {
         CategoryNode categoryNode =
                 findCategory(root, category);
 
+        //return empty list if catgory doesnt exist
         if (categoryNode == null) {
             return new ArrayList<>();
         }
 
+        //return all recipes stored in category
         return categoryNode.recipes;
     }
 
@@ -106,7 +113,7 @@ public class CategoryTree {
         System.out.println(
                 "  ".repeat(level) + "- " + node.category
         );
-
+        //print all recipes stored in category
         for (Recipe recipe : node.recipes) {
 
             System.out.println(
@@ -116,6 +123,7 @@ public class CategoryTree {
             );
         }
 
+        //displays entire tree no matter what size
         for (CategoryNode child : node.children) {
             printNode(child, level + 1);
         }
